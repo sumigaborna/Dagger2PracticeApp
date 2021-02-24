@@ -9,11 +9,14 @@ import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
+@JvmSuppressWildcards
 @Component(
     modules = [
         AndroidSupportInjectionModule::class,
         ActivityBuildersModule::class,
-        AppModule::class
+        AppModule::class,
+        ViewModelFactoryModule::class,
+
     ]
 )
 interface AppComponent : AndroidInjector<BaseApplication> {
