@@ -2,10 +2,12 @@ package com.example.dagger2practiceapp.di
 
 import android.app.Application
 import com.example.dagger2practiceapp.BaseApplication
+import com.example.dagger2practiceapp.SessionManager
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
@@ -19,6 +21,8 @@ import javax.inject.Singleton
     ]
 )
 interface AppComponent : AndroidInjector<BaseApplication> {
+
+    val sessionManager : SessionManager
 
     @Component.Builder
     interface Builder {

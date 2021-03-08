@@ -1,38 +1,33 @@
 package com.example.dagger2practiceapp.ui.auth
 
 import androidx.lifecycle.*
+import com.example.dagger2practiceapp.SessionManager
 import com.example.dagger2practiceapp.models.UserItem
 import com.example.dagger2practiceapp.network.auth.AuthApi
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class AuthViewModel @Inject constructor(private val authApi: AuthApi) : ViewModel() {
+class AuthViewModel @Inject constructor(
+    private val authApi: AuthApi,
+    private val sessionManager: SessionManager
+) : ViewModel() {
 
-    private val authUser = MediatorLiveData<AuthResource<UserItem?>>()
+    fun observeAuthState(): LiveData<AuthResource<UserItem?>> = sessionManager.getAuthUser
 
-    fun observeUser(): LiveData<AuthResource<UserItem?>> = authUser
+    fun authenticateWithId(userId: Int) =
+        sessionManager.authenticateWithId(queryUserId(userId))
 
-    fun authenticateWithId(userId: Int) {
-        authUser.value = AuthResource.loading(data = null)
-
-        val source = LiveDataReactiveStreams.fromPublisher(
+    private fun queryUserId(userId: Int): LiveData<AuthResource<UserItem?>> {
+        return LiveDataReactiveStreams.fromPublisher(
             authApi.getUsers(userId)
                 .onErrorReturn {
-                    UserItem(-1,"")
+                    UserItem(-1, "")
                 }
                 .map {
-                    if(it.id == -1){
-                        AuthResource.error("Could not authenticate",data = it)
-                    }else AuthResource.authenticated(data = it)
+                    if (it.id == -1) {
+                        AuthResource.error("Could not authenticate", data = it)
+                    } else AuthResource.authenticated(data = it)
                 }
-                .subscribeOn(Schedulers.io())
-        )
-
-        authUser.addSource(
-            source
-        ) {
-            authUser.value = it
-            authUser.removeSource(source)
-        }
+                .subscribeOn(Schedulers.io()))
     }
 }

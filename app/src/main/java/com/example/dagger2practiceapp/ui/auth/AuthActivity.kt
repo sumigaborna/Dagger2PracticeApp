@@ -1,5 +1,6 @@
 package com.example.dagger2practiceapp.ui.auth
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.TextUtils
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.RequestManager
 import com.example.dagger2practiceapp.R
+import com.example.dagger2practiceapp.ui.main.MainActivity
 import com.example.dagger2practiceapp.viewmodels.ViewModelProviderFactory
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -39,7 +41,7 @@ class AuthActivity : DaggerAppCompatActivity(),View.OnClickListener {
 
         setLogo()
 
-        viewModel.observeUser().observe(this, {
+        viewModel.observeAuthState().observe(this, {
             if (it != null) {
                 when (it.status) {
                     AuthResource.AuthStatus.LOADING -> {
@@ -48,6 +50,7 @@ class AuthActivity : DaggerAppCompatActivity(),View.OnClickListener {
                     AuthResource.AuthStatus.AUTHENTICATED -> {
                         showProgressBar(false)
                         Log.d("AuthActivity", "Login Success: ${it.data?.email}")
+                        onLoginSuccess()
                     }
                     AuthResource.AuthStatus.ERROR -> {
                         showProgressBar(false)
@@ -74,6 +77,12 @@ class AuthActivity : DaggerAppCompatActivity(),View.OnClickListener {
         if(etUserId.text.isNotBlank()){
             viewModel.authenticateWithId(etUserId.text.toString().toInt())
         }
+    }
+
+    private fun onLoginSuccess(){
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onClick(v: View) {
