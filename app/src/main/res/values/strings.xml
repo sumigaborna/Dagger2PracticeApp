@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Dagger2PracticeApp</string>
+    <string name="logout">logout</string>
 </resources>

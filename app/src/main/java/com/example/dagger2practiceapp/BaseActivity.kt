@@ -16,7 +16,7 @@ abstract class BaseActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        subscribeObservers()
     }
 
     private fun subscribeObservers(){
