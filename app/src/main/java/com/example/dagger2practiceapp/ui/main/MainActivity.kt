@@ -6,17 +6,16 @@ import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.example.dagger2practiceapp.BaseActivity
 import com.example.dagger2practiceapp.R
-import com.example.dagger2practiceapp.ui.main.posts.PostsFragment
-import com.example.dagger2practiceapp.ui.main.profile.ProfileFragment
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var drawerLayout : DrawerLayout
+    private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private lateinit var navController: NavController
 
@@ -25,7 +24,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setContentView(R.layout.activity_main)
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.nav_view)
-        navController = Navigation.findNavController(this,R.id.nav_host_fragment)
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         init()
     }
 
@@ -40,17 +39,24 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 sessionManager.logOut()
                 return true
             }
+            android.R.id.home -> {
+                return if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                } else false
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.nav_profile -> {
-                navController.navigate(R.id.profileScreen)
+                val navOptions = NavOptions.Builder().setPopUpTo(R.id.main, true).build()
+                navController.navigate(R.id.profileScreen, null, navOptions)
             }
             R.id.nav_posts -> {
-                navController.navigate(R.id.postsScreen)
+                if (isValidDestination(R.id.postsScreen)) navController.navigate(R.id.postsScreen)
             }
         }
 
@@ -59,10 +65,18 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
-    private fun init(){
-        val navController = Navigation.findNavController(this,R.id.nav_host_fragment)
-        NavigationUI.setupActionBarWithNavController(this,navController,drawerLayout)
-        NavigationUI.setupWithNavController(navigationView,navController)
+    private fun isValidDestination(destination: Int): Boolean {
+        return destination != navController.currentDestination?.id
+    }
+
+    private fun init() {
+        val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+        NavigationUI.setupWithNavController(navigationView, navController)
         navigationView.setNavigationItemSelectedListener(this)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return NavigationUI.navigateUp(navController, drawerLayout)
     }
 }
