@@ -1,10 +1,10 @@
 package com.example.dagger2practiceapp.models
 
-data class PostsApiResponse(val posts:ArrayList<Post>)
+class PostsApiResponse : ArrayList<Post>()
 
-data class Post (
-    var userId : Int = 0,
-    var id : Int = 0,
-    var title: String? = null,
-    var body: String? = null,
+data class Post(
+    val body: String? = null,
+    var id: Int = 0,
+    val title: String? = null,
+    val userId: Int = 0
 )

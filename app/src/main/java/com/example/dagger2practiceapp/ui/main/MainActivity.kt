@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.example.dagger2practiceapp.BaseActivity
 import com.example.dagger2practiceapp.R
+import com.example.dagger2practiceapp.ui.main.posts.PostsFragment
 import com.example.dagger2practiceapp.ui.main.profile.ProfileFragment
 
 class MainActivity : BaseActivity() {
@@ -31,6 +32,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun testFragment(){
-        supportFragmentManager.beginTransaction().replace(R.id.mainContainer,ProfileFragment()).commitAllowingStateLoss()
+        supportFragmentManager.beginTransaction().replace(R.id.mainContainer,PostsFragment()).commitAllowingStateLoss()
     }
 }

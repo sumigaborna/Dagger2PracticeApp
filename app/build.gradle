@@ -66,8 +66,10 @@ dependencies {
 
     // Retrofit
     def retrofitVersion = "2.5.0"
+    def logging_interceptor_version = '5.0.0-alpha.2'
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation("com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version")
 
     // RxJava
     def rxjava_version = '2.1.1'
