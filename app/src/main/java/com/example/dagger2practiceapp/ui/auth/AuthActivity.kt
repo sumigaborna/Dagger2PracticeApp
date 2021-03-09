@@ -13,10 +13,12 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.RequestManager
 import com.example.dagger2practiceapp.R
+import com.example.dagger2practiceapp.models.UserItem
 import com.example.dagger2practiceapp.ui.main.MainActivity
 import com.example.dagger2practiceapp.viewmodels.ViewModelProviderFactory
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
+import javax.inject.Named
 
 class AuthActivity : DaggerAppCompatActivity(),View.OnClickListener {
 
@@ -30,9 +32,24 @@ class AuthActivity : DaggerAppCompatActivity(),View.OnClickListener {
     @Inject
     lateinit var requestManager: RequestManager
 
+    @Inject
+    @field:Named("app_user")
+    lateinit var userItem1 : UserItem
+
+    @Inject
+    @field:Named("auth_user")
+    lateinit var userItem2 : UserItem
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
+
+        println("User 1: ${userItem1}")
+        println("User 1 hash: ${userItem1.hashCode()}")
+
+        println("User 2: ${userItem2}")
+        println("User 2 hash: ${userItem2.hashCode()}")
+
         viewModel = ViewModelProviders.of(this, providerFactory).get(AuthViewModel::class.java)
 
         etUserId = findViewById(R.id.user_id_input)

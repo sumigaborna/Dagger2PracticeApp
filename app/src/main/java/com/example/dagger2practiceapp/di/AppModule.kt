@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.example.dagger2practiceapp.R
+import com.example.dagger2practiceapp.models.UserItem
 import com.example.dagger2practiceapp.utils.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -16,6 +17,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -56,7 +58,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient():OkHttpClient{
+    fun provideOkHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
         builder.callTimeout(5, TimeUnit.SECONDS)
         builder.addInterceptor(HttpLoggingInterceptor().apply {
@@ -64,4 +66,9 @@ class AppModule {
         })
         return builder.build()
     }
+
+    @Singleton
+    @Provides
+    @Named("app_user")
+    fun someUser(): UserItem = UserItem(1,"test","test","test")
 }
