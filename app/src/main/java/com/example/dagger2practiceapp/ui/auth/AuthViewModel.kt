@@ -21,7 +21,7 @@ class AuthViewModel @Inject constructor(
         return LiveDataReactiveStreams.fromPublisher(
             authApi.getUsers(userId)
                 .onErrorReturn {
-                    UserItem(-1, "")
+                    UserItem(-1, "","","")
                 }
                 .map {
                     if (it.id == -1) {

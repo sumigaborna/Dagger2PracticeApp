@@ -5,4 +5,6 @@ class UsersApiResponse : ArrayList<UserItem>()
 data class UserItem(
     val id: Int,
     val email: String,
+    val username: String,
+    val website: String
 )
